@@ -1,4 +1,4 @@
-package ru.mrscalder.opennlp.examples.loreum;
+package ru.mrscalder.opennlp.example;
 
 import opennlp.tools.lemmatizer.LemmatizerME;
 import opennlp.tools.lemmatizer.LemmatizerModel;
@@ -9,8 +9,10 @@ import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Loreum {
     public static void main(String[] args) throws IOException {
@@ -18,9 +20,15 @@ public class Loreum {
     }
 
     public void execute() throws IOException {
-        String loreumText = new String(getClass().getResourceAsStream("/loreum.txt").readAllBytes(), "utf-8");
+        String line;
 
-        String[] sentences = getSentences(loreumText);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+
+        String[] sentences = getSentences(sb.toString());
         for (String sentence : sentences) {
             System.out.println("Sentence: " + sentence);
             String[] tokens = getTokens(sentence);
@@ -28,7 +36,7 @@ public class Loreum {
             String[] lemmas = getLemmas(tokens, posTags);
 
             for (int i = 0; i < tokens.length; i++) {
-                System.out.println(String.format("token: %s tag: %s lemma: %s", tokens[i], posTags[i], lemmas[i]));
+                System.out.printf("token: %s tag: %s lemma: %s%n", tokens[i], posTags[i], lemmas[i]);
             }
         }
     }
@@ -46,7 +54,6 @@ public class Loreum {
             return new POSTaggerME(posModel).tag(tokens);
         }
     }
-
 
     private String[] getTokens(String sentence) throws IOException {
         try (FileInputStream fis = new FileInputStream("model/en-token.bin")) {

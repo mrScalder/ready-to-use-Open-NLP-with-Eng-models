@@ -13,7 +13,7 @@
     <url>https://github.com/mrScalder/opennpl_examples</url>
 
     <properties>
-        <exec.mainClass>ru.mrscalder.opennlp.examples.loreum.Loreum</exec.mainClass>
+        <exec.mainClass>ru.mrscalder.opennlp.example.Loreum</exec.mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
@@ -116,20 +116,26 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>run-example</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>java</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>ru.mrscalder.opennlp.example.Loreum</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>ru.mrscalder.opennlp.examples.loreum.Loreum</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -141,7 +147,6 @@
             <version>1.9.3</version>
         </dependency>
     </dependencies>
-
     <pluginRepositories>
         <pluginRepository>
             <id>sonatype-public-repository</id>
@@ -151,5 +156,4 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-
 </project>
